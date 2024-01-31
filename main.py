@@ -22,7 +22,7 @@ x_test = X_test / 255 #normalization
 y_test = test_labels
 
 net = Network(
-                 num_nodes_in_layers = [784, 20, 10], 
+                 num_nodes_in_layers = [784, 500, 10], 
                  batch_size = 1,
                  num_epochs = 5,
                  learning_rate = 0.001, 

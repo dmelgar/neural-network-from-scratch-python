@@ -1,7 +1,7 @@
 import numpy as np 
-#import pickle
+import pickle
 import function
-#import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 class Network:
 
@@ -72,13 +72,12 @@ class Network:
                 self.weight2 -= self.learning_rate * weight2_gradient
                 self.bias2 -= self.learning_rate * bias2_gradient
 
-                print('=== Epoch: {:d}/{:d}\tIteration:{:d}\tLoss: {:.2f} ===').format(epoch+1, self.num_epochs, iteration+1, loss)
+                print('=== Epoch: {:d}/{:d}\tIteration:{:d}\tLoss: {:.2f} ==='.format(epoch+1, self.num_epochs, iteration+1, loss))
                 iteration += self.batch_size
-        '''
+
         obj = [self.weight1, self.bias1, self.weight2, self.bias2]
-        with open('filename.pkl', 'wb') as handle:
-            pickle.dump(obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        '''
+        with open(self.weights_file, 'wb') as handle:
+            pickle.dump(obj, handle)
 
     def test(self, inputs, labels):
         input_layer = np.dot(inputs, self.weight1)
@@ -86,5 +85,5 @@ class Network:
         scores = np.dot(hidden_layer, self.weight2) + self.bias2
         probs = function.softmax(scores)
         acc = float(np.sum(np.argmax(probs, 1) == labels)) / float(len(labels))
-        print('Test accuracy: {:.2f}%').format(acc*100)
+        print('Test accuracy: {:.2f}%'.format(acc*100))
 
