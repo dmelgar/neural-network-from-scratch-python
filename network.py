@@ -19,6 +19,10 @@ class Network:
         self.learning_rate = learning_rate
         self.weights_file = weights_file
 
+        # Initialize random number generator with consistent seed
+        rng = np.random.default_rng(1)
+        np.random.seed(1)
+
         # build the network
         #         w1/b1    w2/b2   
         #784(inputs) ---> 20 ---> 10(output)
@@ -32,6 +36,7 @@ class Network:
     def train(self, inputs, labels):
 
         for epoch in range(self.num_epochs): # training begin
+            print(f'Epoch: {epoch}')
             iteration = 0
             while iteration < len(inputs):
 
@@ -43,12 +48,17 @@ class Network:
                 z1 = np.dot(inputs_batch, self.weight1) + self.bias1
                 a1 = function.relu(z1)
                 z2 = np.dot(a1, self.weight2) + self.bias2
-                y = function.softmax(z2)
+                y = function.softmax3(z2)
                 
                 # calculate loss
-                loss = function.cross_entropy(y, labels_batch)
-                loss += function.L2_regularization(0.01, self.weight1, self.weight2)#lambda
-                self.loss.append(loss)
+                # print(f'y shape: {y.shape} labels_batch.shape: { labels_batch.shape }')
+                # print(f'y: {y}')
+                # print(f'labels_batch: {labels_batch}')
+                # loss = function.cross_entropy(y, labels_batch)
+                # loss = function.error_function(y, labels_batch)
+                # print(f'loss: {loss}')
+                # loss += function.L2_regularization(0.01, self.weight1, self.weight2)#lambda
+                # self.loss.append(loss)
 
                 # backward pass
                 delta_y = (y - labels_batch) / y.shape[0]
@@ -72,7 +82,7 @@ class Network:
                 self.weight2 -= self.learning_rate * weight2_gradient
                 self.bias2 -= self.learning_rate * bias2_gradient
 
-                print('=== Epoch: {:d}/{:d}\tIteration:{:d}\tLoss: {:.2f} ==='.format(epoch+1, self.num_epochs, iteration+1, loss))
+                #print('=== Epoch: {:d}/{:d}\tIteration:{:d}\tLoss: {:.2f} ==='.format(epoch+1, self.num_epochs, iteration+1, loss))
                 iteration += self.batch_size
 
         obj = [self.weight1, self.bias1, self.weight2, self.bias2]
